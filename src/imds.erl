@@ -21,6 +21,7 @@
 -define(IMDS_TIMEOUT, 30000).
 -define(IMDS_RETRIES, 3).
 
+-define(JSONE_OPTS, [{object_format, tuple}]).
 
 %%%% API
 
@@ -139,7 +140,7 @@ metadata_response_to_token_proplist(Body) ->
                {<<"AccessKeyId">>, access_key_id},
                {<<"SecretAccessKey">>, secret_access_key},
                {<<"Token">>, token}],
-    case jiffy:decode(Body) of
+    case jsone:decode(Body, ?JSONE_OPTS) of
         {Plist} ->
             case erliam_util:getkey(<<"Code">>, Plist) of
                 <<"Success">> ->
