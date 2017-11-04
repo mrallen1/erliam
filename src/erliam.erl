@@ -29,12 +29,15 @@ credentials() ->
 %% this; call credentials/0 instead.
 get_session_token() ->
     case {erliam_config:g(aws_access_key), erliam_config:g(aws_secret_key)} of
-        {AccessKeyId, SecretAccessKey} when AccessKeyId /= undefined;
-                                            SecretAccessKey /= undefined ->
+        {undefined, undefined} ->
+            imds:get_session_token();
+        {undefined, _Secret} ->
+            {error, no_access_key};
+        {_Access, undefined} ->
+            {error, no_secret_key};
+        {AccessKeyId, SecretAccessKey} ->
             erliam_sts:get_session_token(awsv4:long_term_credentials(AccessKeyId,
-                                                                     SecretAccessKey));
-        _ ->
-            imds:get_session_token()
+                                                                     SecretAccessKey))
     end.
 
 

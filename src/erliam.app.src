@@ -9,7 +9,7 @@
     inets,
     crypto,
     ssl,
-    jiffy]},
+    jsone]},
   {modules, []},
   {env,[]}
  ]}.
